@@ -1,0 +1,16 @@
+# brew install percol
+
+# https://www.youtube.com/watch?v=2jk3EYeEgM0
+
+----------- script to open idea projects ----------
+# Put this script on mac path /usr/local/bin/ with name idea
+#!/bin/sh
+
+PROJECTS_PATH=/Users/mayankarora/budbee/github/
+
+PROJECT=$(ls $PROJECTS_PATH | percol)
+
+open -na "IntelliJ IDEA.app" --args "$PROJECTS_PATH$PROJECT"
+-----------------------------
+
+
