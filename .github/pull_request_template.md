@@ -5,7 +5,7 @@
 Please describe the problem you are solving, including references to any previous material in Slack, ClickUp etc.
 
 ### Checklist before marking as "Ready for review"
-- [ ] I have read [the contribution guidelines](../blob/main/CONTRIBUTING.md)
+- [ ] I have read [the contribution guidelines](https://github.com/instabox/order-api-node/blob/master/CONTRIBUTING.md)
 - [ ] I have performed a self-review of my code
 
 ### Rollback plan (for `risk:high` PRs)
