@@ -5,12 +5,61 @@
 ----------- script to open idea projects ----------
 # Put this script on mac path /usr/local/bin/ with name idea
 #!/bin/sh
-
 PROJECTS_PATH=/Users/mayankarora/budbee/github/
-
 PROJECT=$(ls $PROJECTS_PATH | percol)
-
 open -na "IntelliJ IDEA.app" --args "$PROJECTS_PATH$PROJECT"
 -----------------------------
 
+--------------- script to get token for any infra 2 database ----------
+------------- db_profile.csv ---------
+testing,testing-tactical-ops-db-mysql.cb5zopswqwuj.eu-west-1.rds.amazonaws.com,budbee-testing-tactical-ops-viewer,/Users/mayankarora/bin/eu-west-1-bundle.pem
+development,development-tactical-ops-db-mysql.cqt1oarf2p8q.eu-west-1.rds.amazonaws.com,budbee-development-tactical-ops-viewer,/Users/mayankarora/bin/eu-west-1-bundle.pem
+staging,staging-tactical-ops-db-mysql.c0t2m0efgtqo.eu-west-1.rds.amazonaws.com,budbee-staging-tactical-ops-viewer,/Users/mayankarora/bin/eu-west-1-bundle.pem
+production,production-tactical-ops-db-mysql.c3uvnhal5dts.eu-west-1.rds.amazonaws.com,budbee-production-tactical-ops-viewer,/Users/mayankarora/bin/eu-west-1-bundle.pem
+----------------------------------------
+rm wip.sh
+nano wip.sh
+chmod 777 wip.sh
+------------- connect-db.sh -------------
+#!/bin/bash
 
+DETAILS_TO_GET_TOKEN=$(cat /Users/mayankarora/bin/db_profile.csv | percol)
+
+echo "bla@some.com;john@home.com" | cut -d ";" -f 1
+
+username="reader";
+environment=$(echo $DETAILS_TO_GET_TOKEN | cut -d "," -f 1)
+hostname=$(echo $DETAILS_TO_GET_TOKEN | cut -d "," -f 2)
+profile=$(echo $DETAILS_TO_GET_TOKEN | cut -d "," -f 3)
+ca=$(echo $DETAILS_TO_GET_TOKEN | cut -d "," -f 4)
+
+# hostname=$1
+# profile=$2
+# ca=$3
+
+aws sso login --profile $profile
+
+TOKEN=$(aws rds generate-db-auth-token \
+ --hostname $hostname \
+ --port 3306 \
+ --username $username \
+ --profile $profile)
+
+echo '----------- TOKEN --------------'
+echo $TOKEN
+echo '----------- --------------------- --------------'
+
+read -p "$environment infra 2 vpn connected ? [y/n]:" vpnConnected
+
+if [ "$vpnConnected" = "y" ]; then
+    echo "Attempting a connection:"
+    mysql -u $username -h $hostname \
+     --ssl-ca=$ca \
+     --ssl-mode=VERIFY_IDENTITY \
+     --enable-cleartext-plugin \
+     --password=$TOKEN
+else
+    echo "Happy connecting to db"
+fi
+
+--------------------------------

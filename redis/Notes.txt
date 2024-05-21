@@ -1,0 +1,7 @@
+Start local docker compose image of redis ( budbee-api )
+redis-cli
+ping
+keys *
+# carriers inset key on parcel status update "stop-cache-snippet.CONSUMER-135753-3699162"
+get "stop-cache-snippet.CONSUMER-135753-3699162"
+returns: "{\"routeId\":135753,\"stopId\":3699162,\"stopType\":\"CONSUMER\",\"routeType\":\"DISTRIBUTION\",\"consignments\":[{\"consignmentId\":3422013,\"consignmentType\":\"DELIVERY\",\"stopConsignmentType\":\"UNLOADING_OF_PARCELS\"}]}"
